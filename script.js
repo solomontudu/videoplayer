@@ -11,8 +11,8 @@ const fullscreenBtn = document.querySelector(".fullscreen");
 
 // Play & Pause ----------------------------------- //
 function showPlayIcon() {
-  playBtn.classList.replace("fa-play", "fa-pause");
-  playBtn.setAttribute("title", "Pause");
+  playBtn.classList.replace("fa-pause", "fa-play");
+  playBtn.setAttribute("title", "Play");
 }
 
 function togglePlay() {
@@ -22,6 +22,7 @@ function togglePlay() {
     playBtn.setAttribute("title", "Pause");
   } else {
     video.pause();
+    showPlayIcon();
   }
 }
 
@@ -29,6 +30,14 @@ function togglePlay() {
 video.addEventListener("ended", showPlayIcon);
 
 // Progress Bar ---------------------------------- //
+
+// update progress bar as video plays
+function updateProgress() {
+  progressBar.style.width = `${(video.currentTime / video.duration) * 100}%`;
+  currentTime.textContent = `${Math.floor(video.currentTime / 60)}:${Math.floor(
+    video.currentTime % 60
+  )}`;
+}
 
 // Volume Controls --------------------------- //
 
@@ -39,4 +48,5 @@ video.addEventListener("ended", showPlayIcon);
 // Event Listeners
 playBtn.addEventListener("click", togglePlay);
 video.addEventListener("click", togglePlay);
-video.addEventListener("ended", stopVideo);
+video.addEventListener("timeupdate", updateProgress);
+video.addEventListener("canplay", updateProgress);
